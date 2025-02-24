@@ -1,0 +1,118 @@
+.login-container {
+    max-width: 400px;
+    margin: 80px auto 0;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.login-header h1 {
+    font-size: 2.5rem;
+    color: #1a4f3c;
+    margin-bottom: 1rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+
+.login-header h2 {
+    font-size: 1.2rem;
+    color: #2c7659;
+    font-weight: 500;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #1a4f3c;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #4ade80;
+    box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+}
+
+.login-button {
+    width: 100%;
+    padding: 1rem;
+    background: #2c7659;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.login-button:hover {
+    background: #1a4f3c;
+    transform: translateY(-1px);
+}
+
+.login-button:active {
+    transform: translateY(0);
+}
+
+.signup-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #4b5563;
+}
+
+.signup-link a {
+    color: #2c7659;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 0.5rem;
+}
+
+.signup-link a:hover {
+    color: #1a4f3c;
+    text-decoration: underline;
+}
+
+/* Add this in your index.html head section:
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+*/
+
+/* Optional: Add a decorative element */
+.login-header::after {
+    content: '🌱';
+    display: block;
+    font-size: 2rem;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .login-container {
+        margin: 60px 1rem 0;
+        padding: 1.5rem;
+    }
+
+    .login-header h1 {
+        font-size: 2rem;
+    }
+} 
