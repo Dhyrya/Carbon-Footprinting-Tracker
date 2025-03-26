@@ -51,10 +51,7 @@ const Sidebar = () => {
                     <i className="fas fa-user"></i>
                     Profile
                 </Link>
-                <button onClick={handleLogout} className="logout-btn">
-                    <i className="fas fa-sign-out-alt"></i>
-                    Logout
-                </button>
+                
             </nav>
         </div>
     );

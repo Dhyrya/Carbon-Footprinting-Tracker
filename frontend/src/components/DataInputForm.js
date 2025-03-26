@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './DataInputForm.css';
+import './Dashboard.css'; // For navbar styles
 
 const DataInputForm = ({ onDataAdded }) => {
     const [formData, setFormData] = useState({
@@ -27,10 +28,6 @@ const DataInputForm = ({ onDataAdded }) => {
                 return;
             }
 
-            // Log the request details
-            console.log('Sending request with token:', token);
-            console.log('Form data:', formData);
-
             const response = await axios.post(
                 'http://localhost:5000/api/data/add',
                 {
@@ -48,11 +45,7 @@ const DataInputForm = ({ onDataAdded }) => {
                 }
             );
 
-            // Log the response
-            console.log('Server response:', response.data);
-
             setSuccess('Data added successfully!');
-            // Reset form
             setFormData({
                 type: 'transportation',
                 emissions: '',
@@ -61,13 +54,11 @@ const DataInputForm = ({ onDataAdded }) => {
                 }
             });
 
-            // Trigger parent component update if provided
             if (onDataAdded) {
                 onDataAdded();
             }
 
         } catch (err) {
-            console.error('Full error:', err);
             const errorMessage = err.response?.data?.message || err.message || 'Error adding data';
             setError(`Error: ${errorMessage}`);
         } finally {
@@ -75,96 +66,101 @@ const DataInputForm = ({ onDataAdded }) => {
         }
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+    };
+
     return (
-        <div className="data-input-form">
-            <h2>Add Carbon Footprint Data</h2>
-            
-            {error && (
-                <div className="error-message">
-                    {error}
-                    <button 
-                        className="close-button"
-                        onClick={() => setError('')}
-                    >
-                        ×
-                    </button>
+        <>
+            {/* Navbar */}
+            <nav className="navbar">
+                <div className="navbar-container">
+                    <div className="logo">🌱 EcoTrack</div>
+                    <div className="nav-links">
+                        <a href="/dashboard" className="nav-link">Dashboard</a>
+                        <a href="/data-input" className="nav-link active">Add Activity</a>
+                        <a href="/reports" className="nav-link">Reports</a>
+                        <a href="/profile" className="nav-link">Profile</a>
+                        <button className="logout-btn" onClick={handleLogout}>Logout</button>
+                    </div>
                 </div>
-            )}
-            
-            {success && (
-                <div className="success-message">
-                    {success}
-                    <button 
-                        className="close-button"
-                        onClick={() => setSuccess('')}
-                    >
-                        ×
-                    </button>
-                </div>
-            )}
-            
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor="type">Activity Type</label>
-                    <select
-                        id="type"
-                        value={formData.type}
-                        onChange={(e) => setFormData({
-                            ...formData,
-                            type: e.target.value
-                        })}
-                        required
-                    >
-                        <option value="transportation">Transportation</option>
-                        <option value="electricity">Electricity</option>
-                        <option value="food">Food</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
+            </nav>
 
-                <div className="form-group">
-                    <label htmlFor="emissions">Emissions (kg CO2)</label>
-                    <input
-                        type="number"
-                        id="emissions"
-                        value={formData.emissions}
-                        onChange={(e) => setFormData({
-                            ...formData,
-                            emissions: e.target.value
-                        })}
-                        required
-                        min="0"
-                        step="0.01"
-                        placeholder="Enter amount in kg"
-                    />
-                </div>
+            {/* Form UI */}
+            <div className="data-input-form">
+                <h2>Add Carbon Footprint Data</h2>
 
-                <div className="form-group">
-                    <label htmlFor="description">Description (Optional)</label>
-                    <textarea
-                        id="description"
-                        value={formData.details.description}
-                        onChange={(e) => setFormData({
-                            ...formData,
-                            details: {
-                                ...formData.details,
-                                description: e.target.value
+                {error && (
+                    <div className="error-message">
+                        {error}
+                        <button className="close-button" onClick={() => setError('')}>×</button>
+                    </div>
+                )}
+
+                {success && (
+                    <div className="success-message">
+                        {success}
+                        <button className="close-button" onClick={() => setSuccess('')}>×</button>
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="type">Activity Type</label>
+                        <select
+                            id="type"
+                            value={formData.type}
+                            onChange={(e) =>
+                                setFormData({ ...formData, type: e.target.value })
                             }
-                        })}
-                        placeholder="Describe your activity"
-                        rows="3"
-                    />
-                </div>
+                            required
+                        >
+                            <option value="transportation">Transportation</option>
+                            <option value="electricity">Electricity</option>
+                            <option value="food">Food</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
 
-                <button 
-                    type="submit" 
-                    disabled={loading}
-                    className={loading ? 'button-loading' : ''}
-                >
-                    {loading ? 'Adding...' : 'Add Data'}
-                </button>
-            </form>
-        </div>
+                    <div className="form-group">
+                        <label htmlFor="emissions">Emissions (kg CO2)</label>
+                        <input
+                            type="number"
+                            id="emissions"
+                            value={formData.emissions}
+                            onChange={(e) =>
+                                setFormData({ ...formData, emissions: e.target.value })
+                            }
+                            required
+                            min="0"
+                            step="0.01"
+                            placeholder="Enter amount in kg"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="description">Description (Optional)</label>
+                        <textarea
+                            id="description"
+                            value={formData.details.description}
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    details: { ...formData.details, description: e.target.value }
+                                })
+                            }
+                            placeholder="Describe your activity"
+                            rows="3"
+                        />
+                    </div>
+
+                    <button type="submit" disabled={loading}>
+                        {loading ? 'Adding...' : 'Add Data'}
+                    </button>
+                </form>
+            </div>
+        </>
     );
 };
 
