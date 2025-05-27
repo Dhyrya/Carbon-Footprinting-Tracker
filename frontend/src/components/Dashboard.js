@@ -3,6 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Dashboard.css'; // Import the CSS styles
 
+// Configure axios defaults
+axios.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
 const Dashboard = () => {
     const [userData, setUserData] = useState({
         totalEmissions: 0,
@@ -12,33 +26,36 @@ const Dashboard = () => {
     });
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchDashboardData = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    navigate('/login');
-                    return;
-                }
-
-                const response = await axios.get('http://localhost:5000/api/dashboard', {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-
-                setUserData({
-                    ...response.data,
-                    loading: false
-                });
-            } catch (err) {
-                console.error('Error fetching dashboard data:', err);
-                setUserData(prev => ({
-                    ...prev,
-                    loading: false,
-                    error: 'Failed to load dashboard data'
-                }));
+    const fetchDashboardData = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/dashboard');
+            setUserData({
+                ...response.data,
+                loading: false
+            });
+        } catch (err) {
+            console.error('Error fetching dashboard data:', err);
+            if (err.response?.status === 401) {
+                // Token expired or invalid, redirect to login
+                localStorage.removeItem('token');
+                navigate('/login');
             }
-        };
+            setUserData(prev => ({
+                ...prev,
+                loading: false,
+                error: err.response?.data?.message || 'Failed to fetch dashboard data'
+            }));
+        }
+    };
 
+    useEffect(() => {
+        // Check if token exists
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+        
         fetchDashboardData();
     }, [navigate]);
 

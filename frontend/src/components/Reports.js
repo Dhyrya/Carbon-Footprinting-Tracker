@@ -81,7 +81,7 @@ const Reports = () => {
                 </div>
                 <div className="nav-links">
                     <Link to="/dashboard">Dashboard</Link>
-                    <Link to="/input">Input Data</Link>
+                    <Link to="/data-input">Add Activity</Link>
                     <Link to="/reports" className="active">Reports</Link>
                     <Link to="/profile">Profile</Link>
                     <button className="logout-btn" onClick={handleLogout}>Logout</button>
